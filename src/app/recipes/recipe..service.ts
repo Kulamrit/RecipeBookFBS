@@ -1,10 +1,11 @@
 import { Recipe } from './recipe.model';
-import { EventEmitter } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { Ingredient } from '../shared/ingredient.model';
-
+import { ShoppingListService } from '../shopping-list/shopping-list.service';
+@Injectable()
 export class RecipeService{
     recipeSelected = new EventEmitter<Recipe>()
-    recipes: Recipe[] = [
+    private recipes: Recipe[] = [
         new Recipe('A Test Recipe', 
         'This is description',
         'https://images.theweek.com/sites/default/files/styles/tw_image_9_4/public/istock-527028804.jpg?itok=VtQBDIcm&resize=450x200',
@@ -19,8 +20,15 @@ export class RecipeService{
         [new Ingredient('Garlic',2),new Ingredient('Paneer',3)])
       ];
 
+      constructor(private slService: ShoppingListService) { }
+
      getRecipes()
      {
          return this.recipes.slice();
-     } 
+     }
+     
+     addIngredientsToShoppingList(ingredients : Ingredient[])
+     {
+            this.slService.addIngredients(ingredients);       
+     }
 }
